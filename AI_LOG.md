@@ -595,15 +595,20 @@ Decisão
 
 Continuar priorizando melhorias de qualidade visual e usabilidade, sem realizar alterações desnecessárias na lógica de negócio enquanto as funcionalidades existentes permanecerem estáveis.
 
-## 17. Ajuste de fuso horário — timestamps exibidos em UTC cru; corrigido forçando timeZone: "America/Sao_Paulo" no toLocaleString, e depois corrigido de novo porque o backend não enviava indicador de timezone (Z) — bug só aparecia por cache do navegador mascarando a correção real.
+## 17. Ajuste de fuso horário 
+— timestamps exibidos em UTC cru; corrigido forçando timeZone: "America/Sao_Paulo" no toLocaleString, e depois corrigido de novo porque o backend não enviava indicador de timezone (Z) — bug só aparecia por cache do navegador mascarando a correção real.
 
-## 18. Mudança de regra do dashboard — "abertos" passou a somar Open + In Progress por decisão do usuário, não só Open.
+## 18. Mudança de regra do dashboard 
+— "abertos" passou a somar Open + In Progress por decisão do usuário, não só Open.
 
-## 19. Change Request: comentários e timeline — implementação do modelo Comment, add_comment, get_timeline, rotas e testes; decisão de fazer validação dupla (Pydantic min_length + strip() no service) para rejeitar comentários só com espaços.
+## 19. Change Request: comentários e timeline 
+— implementação do modelo Comment, add_comment, get_timeline, rotas e testes; decisão de fazer validação dupla (Pydantic min_length + strip() no service) para rejeitar comentários só com espaços.
 
-## 20. Exclusão de incidentes e contador de comentários — adicionado por necessidade de usabilidade (não é requisito obrigatório do desafio original nem do CR), DELETE /incidents/{id} e campo comment_count.
+## 20. Exclusão de incidentes e contador de comentários 
+— adicionado por necessidade de usabilidade (não é requisito obrigatório do desafio original nem do CR), DELETE /incidents/{id} e campo comment_count.
 
-## 21. Bugs de frontend pós-edição manual — usuário passou a editar HTML/CSS diretamente; ocorreram 2 regressões: botões "Fechar"/"Excluir" com HTML malformado (divs duplicadas) e quebra total do board ao tentar adicionar filtro de ordenação por severidade nas colunas (coluna "In Progress" foi perdida na cópia). Decisão: reverter o filtro de ordenação por severidade — funcionalidade não obrigatória, risco de regressão maior que o benefício perto do code freeze.
+## 21. Bugs de frontend pós-edição manual 
+— usuário passou a editar HTML/CSS diretamente; ocorreram 2 regressões: botões "Fechar"/"Excluir" com HTML malformado (divs duplicadas) e quebra total do board ao tentar adicionar filtro de ordenação por severidade nas colunas (coluna "In Progress" foi perdida na cópia). Decisão: reverter o filtro de ordenação por severidade — funcionalidade não obrigatória, risco de regressão maior que o benefício perto do code freeze.
 
 
 ## Observações
