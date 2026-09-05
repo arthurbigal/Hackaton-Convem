@@ -389,7 +389,7 @@ Adotar a correção proposta e continuar a validação da interface antes de rea
 
 O problema reforçou a necessidade de validar o comportamento da interface diretamente no navegador, pois o código podia estar estruturado corretamente do ponto de vista funcional, mas uma regra de CSS poderia alterar o comportamento esperado dos elementos HTML.
 
-##12. Redesign visual com identidade da Convem
+## 12. Redesign visual com identidade da Convem
 Objetivo
 
 Aprimorar a apresentação visual do Incident Hub, aproximando a interface da identidade visual e do posicionamento da Convem, sem alterar as funcionalidades existentes da aplicação.
@@ -443,7 +443,7 @@ Decisão
 
 Manter o redesign visual, pois ele melhora significativamente a apresentação da aplicação sem introduzir mudanças na lógica de negócio.
 
-##13. Barra de erro exibida indevidamente após o redesign
+## 13. Barra de erro exibida indevidamente após o redesign
 Objetivo
 
 Corrigir um comportamento visual identificado após o redesign da interface, no qual a barra de erro aparecia na página mesmo sem a ocorrência de um erro.
@@ -492,7 +492,7 @@ Aprendizado
 
 Nem todo problema visual exige alteração da lógica JavaScript. A utilização correta dos estados CSS e dos atributos HTML existentes pode resolver problemas de interface sem alterar o comportamento da aplicação.
 
-##14. Criação de checkpoint antes de novas alterações
+## 14. Criação de checkpoint antes de novas alterações
 Objetivo
 
 Criar um ponto seguro no histórico do Git antes de continuar realizando alterações na interface.
@@ -527,7 +527,7 @@ Decisão
 
 Manter o checkpoint separado dos arquivos não relacionados à implementação, evitando adicionar acidentalmente arquivos ao histórico do projeto.
 
-##15. Rejeição do primeiro push para o GitHub
+## 15. Rejeição do primeiro push para o GitHub
 Objetivo
 
 Publicar no GitHub o checkpoint criado localmente.
@@ -574,7 +574,7 @@ O erro demonstrou a importância de verificar se o repositório remoto possui co
 
 Também foi reforçada a preferência por estratégias de sincronização seguras, evitando force push quando não há necessidade.
 
-##16. Estado atual da interface
+## 16. Estado atual da interface
 Resultado
 
 Após as correções, a interface apresenta:
