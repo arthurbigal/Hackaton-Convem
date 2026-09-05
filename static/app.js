@@ -28,8 +28,12 @@ function showError(message) {
 }
 
 function formatDateTime(isoString) {
-  const date = new Date(isoString);
-  return date.toLocaleString("pt-BR");
+  // O backend grava em UTC mas manda sem indicador de timezone (sem "Z").
+  // Se não tiver "Z" nem offset (+HH:MM), tratamos explicitamente como UTC.
+  const hasTimezone = /Z$|[+-]\d{2}:\d{2}$/.test(isoString);
+  const normalized = hasTimezone ? isoString : `${isoString}Z`;
+  const date = new Date(normalized);
+  return date.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
 }
 
 // ---------- Dashboard ----------
@@ -59,13 +63,24 @@ function createCardElement(incident) {
   const title = document.createElement("h3");
   title.textContent = incident.title;
 
+  const idLabel = document.createElement("div");
+  idLabel.className = "incident-id";
+  idLabel.textContent = `#${incident.id}`;
+
   const owner = document.createElement("div");
   owner.className = "owner";
   owner.textContent = `Responsável: ${incident.owner}`;
 
   card.appendChild(badge);
   card.appendChild(title);
+  card.appendChild(idLabel);
   card.appendChild(owner);
+  if (incident.comment_count > 0) {
+    const commentBadge = document.createElement("div");
+    commentBadge.className = "comment-count";
+    commentBadge.textContent = `💬 ${incident.comment_count}`;
+    card.appendChild(commentBadge);
+  }
 
   card.addEventListener("dragstart", (event) => {
     isDragging = true;
@@ -110,6 +125,15 @@ async function loadBoard() {
     const column = columnsByStatus[incident.status];
     if (column) {
       column.appendChild(createCardElement(incident));
+    }
+  });
+
+    Object.entries(columnsByStatus).forEach(([status, column]) => {
+    if (column.children.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "empty-column";
+      empty.textContent = "Nenhum incidente aqui.";
+      column.appendChild(empty);
     }
   });
 }
@@ -229,6 +253,7 @@ async function openDetailModal(incidentId) {
     incident.description;
   document.getElementById("detail-owner").textContent = incident.owner;
   document.getElementById("detail-status").textContent = incident.status;
+  document.getElementById("detail-title").textContent = `#${incident.id} — ${incident.title}`;
   document.getElementById("detail-created").textContent = formatDateTime(
     incident.created_at
   );
@@ -236,21 +261,23 @@ async function openDetailModal(incidentId) {
     incident.updated_at
   );
 
-  const historyList = document.getElementById("detail-history");
+    const historyList = document.getElementById("detail-history");
   historyList.innerHTML = "";
-  if (incident.history.length === 0) {
+  if (incident.timeline.length === 0) {
     const li = document.createElement("li");
-    li.textContent = "Nenhuma alteração de status registrada ainda.";
+    li.textContent = "Nenhuma atividade registrada ainda.";
     historyList.appendChild(li);
   } else {
-    incident.history.forEach((entry) => {
+    incident.timeline.forEach((event) => {
       const li = document.createElement("li");
-      li.textContent = `${formatDateTime(entry.changed_at)} — ${entry.previous_status} → ${entry.new_status}`;
+      li.textContent = `${formatDateTime(event.timestamp)} — ${event.description}`;
       historyList.appendChild(li);
     });
   }
 
+  detailModal.dataset.incidentId = incident.id;
   detailModal.hidden = false;
+
 }
 
 document.getElementById("close-detail").addEventListener("click", () => {
@@ -264,3 +291,39 @@ severityFilter.addEventListener("change", loadBoard);
 // ---------- Inicialização ----------
 
 refreshAll();
+
+document.getElementById("comment-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const incidentId = document.getElementById("detail-modal").dataset.incidentId;
+  const author = document.getElementById("comment-author").value;
+  const content = document.getElementById("comment-content").value;
+
+  const response = await fetch(`/incidents/${incidentId}/comments`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ author, content }),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.json().catch(() => ({}));
+    showError(errorBody.detail || "Não foi possível adicionar o comentário.");
+    return;
+  }
+
+  document.getElementById("comment-form").reset();
+  await openDetailModal(incidentId);
+  await refreshAll();
+});
+
+document.getElementById("delete-incident").addEventListener("click", async () => {
+  const incidentId = document.getElementById("detail-modal").dataset.incidentId;
+  if (!confirm("Tem certeza que deseja excluir este incidente?")) return;
+
+  const response = await fetch(`/incidents/${incidentId}`, { method: "DELETE" });
+  if (!response.ok) {
+    showError("Não foi possível excluir o incidente.");
+    return;
+  }
+  document.getElementById("detail-modal").hidden = true;
+  await refreshAll();
+});

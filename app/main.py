@@ -19,6 +19,13 @@ from app.database.seed import seed_initial_data
 from app.models import incident  # noqa: F401 - garante que os modelos sejam registrados
 from app.routes import dashboard, incidents
 from app.services.exceptions import IncidentNotFoundError, InvalidTransitionError
+from app.models import comment, incident  # noqa: F401 - garante que os modelos sejam registrados
+from app.routes import dashboard, incidents
+from app.services.exceptions import (
+    IncidentNotFoundError,
+    InvalidCommentError,
+    InvalidTransitionError,
+)
 
 
 @asynccontextmanager
@@ -51,6 +58,11 @@ def handle_invalid_transition(request: Request, exc: InvalidTransitionError):
 def handle_incident_not_found(request: Request, exc: IncidentNotFoundError):
     """Incidente inexistente -> 404 com mensagem compreensível."""
     return JSONResponse(status_code=404, content={"detail": exc.message})
+
+@app.exception_handler(InvalidCommentError)
+def handle_invalid_comment(request: Request, exc: InvalidCommentError):
+    """Comentário inválido (vazio) -> 400 com mensagem compreensível."""
+    return JSONResponse(status_code=400, content={"detail": exc.message})
 
 
 @app.get("/")

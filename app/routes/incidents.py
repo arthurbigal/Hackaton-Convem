@@ -12,6 +12,8 @@ from sqlalchemy.orm import Session
 
 from app.database.db import get_db
 from app.schemas.incident import (
+    CommentCreate,
+    CommentResponse,
     IncidentCreate,
     IncidentDetailResponse,
     IncidentResponse,
@@ -46,7 +48,19 @@ def list_incidents(
 
 @router.get("/{incident_id}", response_model=IncidentDetailResponse)
 def get_incident(incident_id: int, db: Session = Depends(get_db)):
-    return incident_service.get_incident(db, incident_id)
+    incident = incident_service.get_incident(db, incident_id)
+    # Atributo dinâmico (não persistido) só para a serialização da resposta.
+    incident.timeline = incident_service.get_timeline(incident)
+    return incident
+
+
+@router.post("/{incident_id}/comments", response_model=CommentResponse, status_code=201)
+def create_comment(
+    incident_id: int, payload: CommentCreate, db: Session = Depends(get_db)
+):
+    return incident_service.add_comment(
+        db, incident_id, payload.author, payload.content
+    )
 
 
 @router.patch("/{incident_id}/status", response_model=IncidentResponse)
@@ -60,3 +74,7 @@ def update_status(
 def get_history(incident_id: int, db: Session = Depends(get_db)):
     incident = incident_service.get_incident(db, incident_id)
     return incident.history
+
+@router.delete("/{incident_id}", status_code=204)
+def delete_incident(incident_id: int, db: Session = Depends(get_db)):
+    incident_service.delete_incident(db, incident_id)

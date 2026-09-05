@@ -239,12 +239,21 @@
         <h3>Histórico</h3>
         <ul id="detail-history" class="history-list"></ul>
       </div>
-
-      <div class="modal-actions">
-        <button type="button" id="close-detail" class="btn">
-          Fechar
-        </button>
+            <div class="comment-section">
+        <h3>Novo comentário</h3>
+        <form id="comment-form">
+          <input type="text" id="comment-author" placeholder="Seu nome" required />
+          <textarea id="comment-content" placeholder="Comentário" required></textarea>
+          <button type="submit" class="btn btn-primary">Comentar</button>
+        </form>
       </div>
+
+            <div class="modal-actions">
+        <button type="button" id="close-detail" class="btn">Fechar</button>
+        <button type="button" id="delete-incident" class="btn btn-danger">Excluir</button>
+      </div>
+
+    </div>
 
     </div>
   </div>

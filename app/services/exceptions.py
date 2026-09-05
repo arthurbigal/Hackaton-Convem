@@ -21,3 +21,10 @@ class IncidentNotFoundError(Exception):
         super().__init__(message)
         self.message = message
         self.incident_id = incident_id
+
+class InvalidCommentError(Exception):
+    """Levantada quando um comentário é inválido (autor/conteúdo vazios)."""
+
+    def __init__(self, message: str):
+        super().__init__(message)
+        self.message = message

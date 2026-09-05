@@ -12,8 +12,13 @@ from typing import Optional
 from sqlalchemy.orm import Session
 
 from app.models.enums import Severity, Status
+from app.models.comment import Comment
 from app.models.incident import Incident, StatusHistory
-from app.services.exceptions import IncidentNotFoundError, InvalidTransitionError
+from app.services.exceptions import (
+    IncidentNotFoundError,
+    InvalidCommentError,
+    InvalidTransitionError,
+)
 
 # Transições de status permitidas em geral (independentemente da severidade).
 # Chave: (status_atual, novo_status) -> permitido.
@@ -87,7 +92,9 @@ def get_dashboard_summary(db: Session) -> dict:
     - resolved_count: incidentes com status Resolved.
     """
     open_count = (
-        db.query(Incident).filter(Incident.status == Status.OPEN.value).count()
+        db.query(Incident)
+        .filter(Incident.status != Status.RESOLVED.value)
+        .count()
     )
     critical_unresolved_count = (
         db.query(Incident)
@@ -105,6 +112,64 @@ def get_dashboard_summary(db: Session) -> dict:
         "critical_unresolved_count": critical_unresolved_count,
         "resolved_count": resolved_count,
     }
+
+def delete_incident(db: Session, incident_id: int) -> None:
+    """Remove um incidente (e seu histórico/comentários, via cascade)."""
+    incident = get_incident(db, incident_id)
+    db.delete(incident)
+    db.commit()
+
+def add_comment(db: Session, incident_id: int, author: str, content: str) -> Comment:
+    """Adiciona um comentário a um incidente.
+
+    Autor e conteúdo são obrigatórios e não podem ser vazios (nem só
+    espaços em branco). Levanta `InvalidCommentError` caso contrário, e
+    `IncidentNotFoundError` se o incidente não existir.
+    """
+    incident = get_incident(db, incident_id)
+
+    author = (author or "").strip()
+    content = (content or "").strip()
+    if not author or not content:
+        raise InvalidCommentError(
+            "Autor e conteúdo do comentário são obrigatórios e não podem ser vazios."
+        )
+
+    comment = Comment(incident_id=incident.id, author=author, content=content)
+    db.add(comment)
+    db.commit()
+    db.refresh(comment)
+    return comment
+
+
+def get_timeline(incident: Incident) -> list[dict]:
+    """Monta a timeline cronológica única de status + comentários de um incidente.
+
+    Retorna uma lista de dicts com `timestamp` e `description`, ordenada
+    do evento mais antigo para o mais recente.
+    """
+    events: list[dict] = []
+
+    for entry in incident.history:
+        events.append(
+            {
+                "timestamp": entry.changed_at,
+                "description": (
+                    f"Status changed: {entry.previous_status} → {entry.new_status}"
+                ),
+            }
+        )
+
+    for comment in incident.comments:
+        events.append(
+            {
+                "timestamp": comment.created_at,
+                "description": f'{comment.author} commented: "{comment.content}"',
+            }
+        )
+
+    events.sort(key=lambda event: event["timestamp"])
+    return events
 
 def change_status(db: Session, incident_id: int, new_status: str) -> Incident:
     """Altera o status de um incidente, aplicando as regras de transição.

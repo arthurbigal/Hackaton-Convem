@@ -682,12 +682,12 @@ main {
 
 .badge-Medium {
   background: var(--yellow-soft);
-  color: #b54708;
+  color: #cac717;
 }
 
 .badge-High {
   background: var(--orange-soft);
-  color: #b42318;
+  color: #c85021;
 }
 
 .badge-Critical {
@@ -697,6 +697,17 @@ main {
   border: 1px solid #fecdca;
 }
 
+.comment-count {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0052cc;
+  background: #deebff;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-top: 4px;
+}
+.btn-danger { background: #de350b; color: #fff; border-color: #de350b; }
 
 /* =========================================================
    CRITICAL CARD ACCENTS
@@ -707,17 +718,16 @@ main {
 }
 
 .incident-card:has(.badge-High)::before {
-  background: var(--orange);
+  background: #c85021;
 }
 
 .incident-card:has(.badge-Medium)::before {
-  background: var(--yellow);
+  background: #cac717;
 }
 
 .incident-card:has(.badge-Low)::before {
   background: var(--green);
 }
-
 
 /* =========================================================
    MODALS
@@ -910,6 +920,16 @@ main {
   line-height: 1.65;
 
   margin: 8px 0 22px;
+
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.empty-column {
+  color: #5e6c84;
+  font-size: 13px;
+  text-align: center;
+  padding: 20px 0;
 }
 
 .detail-grid {
@@ -977,6 +997,9 @@ main {
   font-size: 12px;
 
   border-top: 1px solid var(--border);
+
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .history-list li {
@@ -1101,6 +1124,8 @@ main {
 
 .error-banner[hidden] {
   display: none;
+  position: relative;
+  z-index: 20;
 }
 
 /* Dashboard - cards suaves */

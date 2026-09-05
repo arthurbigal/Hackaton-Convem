@@ -37,6 +37,28 @@ class StatusHistoryResponse(BaseModel):
     new_status: str
     changed_at: datetime
 
+class CommentCreate(BaseModel):
+    """Payload para adicionar um comentário a um incidente."""
+
+    author: str = Field(min_length=1, max_length=120)
+    content: str = Field(min_length=1, max_length=2000)
+
+
+class CommentResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    author: str
+    content: str
+    created_at: datetime
+
+
+class TimelineEntryResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    timestamp: datetime
+    description: str
+
 
 class IncidentResponse(BaseModel):
     """Resposta usada na criação e na listagem de incidentes."""
@@ -51,12 +73,15 @@ class IncidentResponse(BaseModel):
     status: str
     created_at: datetime
     updated_at: datetime
+    comment_count: int = 0
 
 
 class IncidentDetailResponse(IncidentResponse):
-    """Resposta de detalhe: inclui o histórico de transições."""
+    """Resposta de detalhe: inclui histórico, comentários e a timeline unificada."""
 
     history: list[StatusHistoryResponse] = []
+    comments: list[CommentResponse] = []
+    timeline: list[TimelineEntryResponse] = []
 
 
 class DashboardResponse(BaseModel):

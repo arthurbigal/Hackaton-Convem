@@ -54,8 +54,20 @@ class Incident(Base):
         order_by="StatusHistory.changed_at",
     )
 
+    comments: Mapped[list["Comment"]] = relationship(
+        "Comment",
+        back_populates="incident",
+        cascade="all, delete-orphan",
+        order_by="Comment.created_at",
+    )
+
     def __repr__(self) -> str:  # pragma: no cover - apenas debug
         return f"<Incident id={self.id} title={self.title!r} status={self.status!r}>"
+    @property
+    def comment_count(self) -> int:
+        return len(self.comments)
+
+    
 
 
 class StatusHistory(Base):
