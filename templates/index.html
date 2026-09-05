@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Incident Hub</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Incident Hub</h1>
+    <button id="open-create-modal" class="btn btn-primary">+ Novo incidente</button>
+  </header>
+
+  <section class="dashboard" id="dashboard">
+    <div class="dashboard-card">
+      <span class="dashboard-number" id="dash-open">-</span>
+      <span class="dashboard-label">Abertos</span>
+    </div>
+    <div class="dashboard-card dashboard-card-critical">
+      <span class="dashboard-number" id="dash-critical">-</span>
+      <span class="dashboard-label">Critical não resolvidos</span>
+    </div>
+    <div class="dashboard-card">
+      <span class="dashboard-number" id="dash-resolved">-</span>
+      <span class="dashboard-label">Resolvidos</span>
+    </div>
+  </section>
+
+  <section class="filters">
+    <label>
+      Severidade:
+      <select id="filter-severity">
+        <option value="">Todas</option>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+        <option value="Critical">Critical</option>
+      </select>
+    </label>
+  </section>
+
+  <div id="error-banner" class="error-banner" hidden></div>
+
+  <main class="board">
+    <div class="column" data-status="Open">
+      <h2>Open</h2>
+      <div class="card-list" id="column-open"></div>
+    </div>
+    <div class="column" data-status="In Progress">
+      <h2>In Progress</h2>
+      <div class="card-list" id="column-in-progress"></div>
+    </div>
+    <div class="column" data-status="Resolved">
+      <h2>Resolved</h2>
+      <div class="card-list" id="column-resolved"></div>
+    </div>
+  </main>
+
+  <!-- Modal de criação -->
+  <div id="create-modal" class="modal-overlay" hidden>
+    <div class="modal">
+      <h2>Novo incidente</h2>
+      <form id="create-form">
+        <label>
+          Título
+          <input type="text" id="create-title" required maxlength="200" />
+        </label>
+        <label>
+          Descrição
+          <textarea id="create-description" required maxlength="2000"></textarea>
+        </label>
+        <label>
+          Severidade
+          <select id="create-severity" required>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+            <option value="Critical">Critical</option>
+          </select>
+        </label>
+        <label>
+          Responsável
+          <input type="text" id="create-owner" required maxlength="120" />
+        </label>
+        <div class="modal-actions">
+          <button type="button" id="cancel-create" class="btn">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Criar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal de detalhes -->
+  <div id="detail-modal" class="modal-overlay" hidden>
+    <div class="modal">
+      <h2 id="detail-title"></h2>
+      <span id="detail-severity-badge" class="badge"></span>
+      <p id="detail-description" class="detail-description"></p>
+      <dl class="detail-grid">
+        <dt>Responsável</dt>
+        <dd id="detail-owner"></dd>
+        <dt>Status</dt>
+        <dd id="detail-status"></dd>
+        <dt>Criado em</dt>
+        <dd id="detail-created"></dd>
+        <dt>Atualizado em</dt>
+        <dd id="detail-updated"></dd>
+      </dl>
+      <h3>Histórico</h3>
+      <ul id="detail-history" class="history-list"></ul>
+      <div class="modal-actions">
+        <button type="button" id="close-detail" class="btn">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
