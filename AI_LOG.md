@@ -340,6 +340,56 @@ As próximas decisões serão registradas neste documento à medida que forem to
 
 ---
 
+## 11. Bug nos modais da interface
+
+### Objetivo
+
+Validar a interface web após a implementação e corrigir um problema que impedia a utilização da aplicação.
+
+### Contexto
+
+Após abrir a aplicação no navegador, a página apresentava uma tela/modal contendo os campos:
+
+* Responsável
+* Status
+* Criado em
+* Atualizado em
+* Histórico
+* Fechar
+
+O botão "Fechar" não permitia sair da tela, fazendo com que a aplicação permanecesse aparentemente travada. O restante da interface aparecia atrás do modal, mas não podia ser utilizado.
+
+### Instrução
+
+Foi informado ao Claude o comportamento observado no navegador e solicitado que identificasse a causa do problema e propusesse uma correção rápida, considerando a limitação de uso restante da sessão.
+
+### Resultado
+
+Claude identificou que a regra CSS `.modal-overlay { display: flex; }` estava sobrescrevendo o comportamento esperado do atributo HTML `hidden`.
+
+Como consequência, os modais que deveriam permanecer ocultos estavam sendo exibidos automaticamente ao carregar a página.
+
+A correção proposta foi adicionar ao final de `static/style.css`:
+
+```css
+.modal-overlay[hidden] {
+  display: none;
+}
+```
+
+### Validação
+
+A correção deveria ser validada salvando o arquivo e recarregando a aplicação com `Ctrl+F5`, verificando se os modais permanecem ocultos inicialmente e aparecem somente após a interação correspondente.
+
+### Decisão
+
+Adotar a correção proposta e continuar a validação da interface antes de realizar novas alterações.
+
+### Aprendizado
+
+O problema reforçou a necessidade de validar o comportamento da interface diretamente no navegador, pois o código podia estar estruturado corretamente do ponto de vista funcional, mas uma regra de CSS poderia alterar o comportamento esperado dos elementos HTML.
+
+
 ## Observações
 
 As conversas originais com as ferramentas de IA permanecem disponíveis para eventual auditoria, conforme as regras do hackathon.
