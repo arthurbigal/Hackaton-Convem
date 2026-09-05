@@ -552,6 +552,15 @@ main {
 
   transition: background 0.15s ease;
 }
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-list {
+  flex: 1;
+  min-height: 330px;
+}
 
 .card-list.drag-over {
   background: rgba(124, 58, 237, 0.07);
