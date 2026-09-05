@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ambiente virtual
+venv/
+.venv/
+env/
+ENV/
+
+# Banco de dados local (SQLite)
+*.db
+*.sqlite3
+
+# Variáveis de ambiente
+.env
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# Windows
+Thumbs.db
+desktop.ini
