@@ -50,6 +50,18 @@ A primeira versão deverá implementar:
 * Testes automatizados para as principais regras de negócio.
 * Instruções claras de execução e reprodução.
 
+### Change Request (recebido durante o desenvolvimento)
+
+Após a primeira versão funcional, o desafio introduziu um novo requisito obrigatório: comentários em incidentes.
+
+- Cada incidente pode ter múltiplos comentários (autor, conteúdo, data/hora).
+- Autor e conteúdo são obrigatórios; comentários vazios ou só com espaços são rejeitados pelo backend.
+- O histórico de status foi generalizado para uma **timeline única**, combinando mudanças de status e comentários em ordem cronológica.
+- Persistência dos comentários segue o mesmo mecanismo (SQLite via SQLAlchemy).
+- Também foi adicionada, por necessidade identificada durante o uso, a exclusão de incidentes (`DELETE /incidents/{id}`).
+
+Essa mudança passou a ser requisito obrigatório, sem invalidar os requisitos anteriores — validado com a suíte de testes completa (29 testes) após a implementação.
+
 ### Desejável
 
 Caso o desenvolvimento do escopo obrigatório seja concluído com segurança, poderão ser consideradas melhorias como:
@@ -376,7 +388,7 @@ O histórico permanece associado ao incidente e é persistido.
 
 Os indicadores apresentados correspondem aos dados atuais armazenados:
 
-* quantidade de incidentes abertos;
+* quantidade de incidentes abertos (open + in progress);
 * quantidade de Critical não resolvidos;
 * quantidade de incidentes resolvidos.
 
