@@ -106,8 +106,32 @@ A aplicação será organizada de forma a separar:
 * acesso/persistência;
 * regras de negócio;
 * rotas/API;
-* interface;
 * testes.
+
+* ### Interface e experiência de uso
+
+A interface principal será estruturada como um quadro Kanban, permitindo visualizar os incidentes de acordo com seu status atual.
+
+As colunas serão:
+
+* Open;
+* In Progress;
+* Resolved.
+
+Cada incidente será apresentado como um card contendo, no mínimo:
+
+* título;
+* severidade;
+* responsável.
+
+A alteração de status poderá ser realizada por meio de interação de drag-and-drop entre as colunas.
+
+A severidade não será utilizada como coluna do Kanban. Ela será representada dentro do card, permitindo distinguir visualmente incidentes Low, Medium, High e Critical.
+
+A movimentação de um card deverá resultar em uma alteração persistida do status no backend. As regras de negócio deverão ser validadas no backend, independentemente da interface.
+
+Essa abordagem foi escolhida para tornar o acompanhamento dos incidentes mais visual e permitir que a equipe identifique rapidamente o estado e a gravidade dos problemas.
+
 
 A regra de negócio relacionada às transições de status deverá ficar separada da camada visual, permitindo que ela seja testada independentemente da interface.
 
@@ -199,16 +223,42 @@ Criar os endpoints necessários para:
 
 ### 5. Interface
 
-Construir uma interface simples contendo:
+Construir uma interface simples baseada em um quadro Kanban.
 
-* dashboard;
-* lista de incidentes;
-* filtros;
+O quadro deverá possuir três colunas:
+
+```text
+┌──────────────┬────────────────┬──────────────┐
+│     OPEN     │  IN PROGRESS   │   RESOLVED   │
+└──────────────┴────────────────┴──────────────┘
+```
+
+Cada coluna deverá apresentar os incidentes correspondentes ao seu status.
+
+Cada card deverá apresentar informações suficientes para identificação rápida do incidente, incluindo título, severidade e responsável.
+
+Implementar drag-and-drop para permitir a movimentação dos incidentes entre as colunas.
+
+Ao mover um incidente:
+
+1. a interface identifica o novo status;
+2. envia a alteração para o backend;
+3. o backend valida a transição;
+4. caso seja válida, a alteração é persistida;
+5. o histórico é registrado;
+6. a interface é atualizada;
+7. caso seja inválida, o incidente permanece em seu status anterior e uma mensagem compreensível é apresentada.
+
+Também serão disponibilizados:
+
+* filtros por status;
+* filtros por severidade;
 * formulário de criação;
-* página de detalhes;
-* histórico;
-* controles para alteração de status;
-* mensagens de erro e sucesso.
+* visualização dos detalhes;
+* histórico de alterações;
+* dashboard com os indicadores solicitados.
+
+A interface deverá priorizar clareza e funcionalidade em vez de sofisticação visual.
 
 ### 6. Dados iniciais
 
@@ -253,6 +303,18 @@ Também será registrada a forma de executar e reproduzir a aplicação.
 ---
 
 ## Critérios de aceite
+
+### Interface Kanban
+
+* Os incidentes são exibidos em três colunas: Open, In Progress e Resolved.
+* Cada incidente aparece em um card identificável.
+* O card apresenta título, severidade e responsável.
+* O usuário consegue arrastar um incidente para outra coluna.
+* Uma movimentação válida altera o status persistido do incidente.
+* Uma movimentação inválida é rejeitada pelo backend.
+* Após uma movimentação válida, o histórico da alteração é registrado.
+* Um incidente Critical não pode ser movido diretamente de Open para Resolved.
+* Após recarregar a aplicação, o incidente permanece na coluna correspondente ao seu status persistido.
 
 ### Criação
 
@@ -397,3 +459,11 @@ Cada etapa deverá ser validada antes de avançar para a próxima.
 O `AI_LOG.md` será utilizado para registrar as principais interações com IA e decisões relevantes tomadas durante o desenvolvimento.
 
 O plano será atualizado conforme novas informações forem descobertas durante a implementação, permitindo acompanhar a evolução da estratégia ao longo do hackathon.
+
+## Evolução do plano
+
+A abordagem inicial previa uma interface web genérica para listagem e gerenciamento dos incidentes.
+
+Durante o planejamento, foi definida uma abordagem baseada em Kanban para tornar o acompanhamento operacional mais visual. As colunas representarão os três possíveis status dos incidentes, enquanto a severidade será apresentada nos cards.
+
+Essa decisão mantém os requisitos funcionais do desafio, mas melhora a visualização do fluxo de tratamento dos incidentes e torna a alteração de status mais intuitiva.
