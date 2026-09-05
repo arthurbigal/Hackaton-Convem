@@ -389,6 +389,212 @@ Adotar a correção proposta e continuar a validação da interface antes de rea
 
 O problema reforçou a necessidade de validar o comportamento da interface diretamente no navegador, pois o código podia estar estruturado corretamente do ponto de vista funcional, mas uma regra de CSS poderia alterar o comportamento esperado dos elementos HTML.
 
+##12. Redesign visual com identidade da Convem
+Objetivo
+
+Aprimorar a apresentação visual do Incident Hub, aproximando a interface da identidade visual e do posicionamento da Convem, sem alterar as funcionalidades existentes da aplicação.
+
+Contexto
+
+Após a primeira versão funcional estar estabelecida, foi identificado que a interface ainda apresentava um aspecto muito genérico. Como o projeto seria apresentado em um processo seletivo da Convem, foi considerada importante uma evolução visual que transmitisse uma aparência mais profissional e alinhada à empresa.
+
+A alteração deveria ser exclusivamente visual, preservando a lógica existente da aplicação, incluindo:
+
+criação de incidentes;
+alteração de status por drag-and-drop;
+filtros;
+dashboard;
+abertura dos detalhes;
+histórico;
+comunicação com a API.
+Instrução
+
+Foi solicitado à IA que analisasse a interface existente e propusesse alterações no templates/index.html e no static/style.css para aproximar a aplicação de uma solução SaaS/fintech profissional, incorporando elementos visuais associados à identidade da Convem.
+
+Também foi solicitado que a alteração não modificasse o static/app.js nem a lógica funcional existente.
+
+Resultado
+
+A interface foi redesenhada mantendo a estrutura funcional existente.
+
+Entre as principais alterações realizadas:
+
+criação de uma identidade visual para a marca na interface;
+inclusão do nome "CONVEM" junto ao "Incident Hub";
+utilização de uma paleta visual mais moderna;
+melhoria do cabeçalho;
+criação de maior separação visual entre o header e o restante da aplicação;
+aprimoramento dos cards do dashboard;
+melhoria visual dos filtros;
+aprimoramento das colunas do Kanban;
+melhorias nos cards de incidentes;
+aprimoramento visual dos modais;
+melhoria de espaçamentos, bordas, sombras e tipografia.
+
+As alterações foram concentradas em templates/index.html e static/style.css, preservando o JavaScript existente.
+
+Validação
+
+A aplicação foi executada localmente após as alterações e a interface foi analisada diretamente no navegador.
+
+Durante a validação visual, foi identificado um novo comportamento inesperado relacionado à barra de erro, registrado na seção seguinte.
+
+Decisão
+
+Manter o redesign visual, pois ele melhora significativamente a apresentação da aplicação sem introduzir mudanças na lógica de negócio.
+
+##13. Barra de erro exibida indevidamente após o redesign
+Objetivo
+
+Corrigir um comportamento visual identificado após o redesign da interface, no qual a barra de erro aparecia na página mesmo sem a ocorrência de um erro.
+
+Contexto
+
+A aplicação possui um elemento error-banner destinado a apresentar mensagens de erro somente quando alguma operação falha.
+
+O HTML já utilizava o atributo:
+
+hidden
+
+e o JavaScript controlava a exibição da mensagem por meio da função showError().
+
+Entretanto, após as alterações de CSS, a barra vermelha permanecia visível logo ao carregar a aplicação.
+
+Instrução
+
+Foi informado à IA que a barra vermelha aparecia mesmo quando não havia erro e solicitado que fosse identificada uma correção que preservasse o comportamento existente do JavaScript.
+
+Resultado
+
+Foi identificado que o CSS possuía uma regra visual para .error-banner, mas não possuía uma regra explícita para o estado [hidden].
+
+Como o JavaScript depende do atributo hidden para controlar a exibição da mensagem, a solução escolhida foi adicionar ao static/style.css:
+
+.error-banner[hidden] {
+  display: none;
+}
+
+Essa abordagem permite que o elemento permaneça oculto inicialmente e continue sendo exibido normalmente quando o JavaScript remover o estado hidden.
+
+Validação
+
+Após salvar o CSS e recarregar a aplicação, a barra deixou de aparecer automaticamente durante o carregamento inicial.
+
+O comportamento de exibição de erros foi preservado, pois o JavaScript continua responsável por alterar o estado do elemento.
+
+Decisão
+
+Manter a correção exclusivamente no CSS, sem modificar o index.html ou o app.js.
+
+A decisão foi tomada para reduzir o risco de regressão e preservar a lógica funcional já implementada.
+
+Aprendizado
+
+Nem todo problema visual exige alteração da lógica JavaScript. A utilização correta dos estados CSS e dos atributos HTML existentes pode resolver problemas de interface sem alterar o comportamento da aplicação.
+
+##14. Criação de checkpoint antes de novas alterações
+Objetivo
+
+Criar um ponto seguro no histórico do Git antes de continuar realizando alterações na interface.
+
+Contexto
+
+Após a conclusão do redesign visual, foi considerado importante preservar uma versão estável da aplicação antes de realizar novas correções.
+
+Instrução
+
+Foi solicitado apoio da IA para verificar o estado do repositório e realizar um commit contendo as alterações do redesign.
+
+Resultado
+
+Os arquivos templates/index.html e static/style.css foram adicionados ao staging e foi criado o commit:
+
+feat: redesign interface do Incident Hub
+
+O commit gerado localmente recebeu o identificador:
+
+9de0281
+
+O arquivo Hackaton Instructions.md, que aparecia como não rastreado, não foi incluído no commit.
+
+Validação
+
+O comando git status confirmou que o branch local estava à frente do origin/main por um commit.
+
+Posteriormente, foi realizada uma tentativa de enviar as alterações para o GitHub.
+
+Decisão
+
+Manter o checkpoint separado dos arquivos não relacionados à implementação, evitando adicionar acidentalmente arquivos ao histórico do projeto.
+
+##15. Rejeição do primeiro push para o GitHub
+Objetivo
+
+Publicar no GitHub o checkpoint criado localmente.
+
+Contexto
+
+Após a criação do commit local, foi executado:
+
+git push origin main
+
+O GitHub rejeitou a operação.
+
+Resultado
+
+O terminal retornou:
+
+! [rejected] main -> main (fetch first)
+
+O erro indicava que o repositório remoto possuía alterações que ainda não estavam presentes no repositório local.
+
+Instrução
+
+Foi solicitado apoio à IA para interpretar o erro e determinar uma forma segura de sincronizar os históricos sem sobrescrever alterações existentes no GitHub.
+
+Decisão
+
+Foi evitado o uso de git push --force, pois isso poderia sobrescrever alterações existentes no repositório remoto.
+
+Foi utilizada a estratégia:
+
+git pull --rebase origin main
+
+seguida novamente por:
+
+git push origin main
+
+Validação
+
+O procedimento foi concluído com sucesso e as alterações locais foram publicadas no GitHub.
+
+Aprendizado
+
+O erro demonstrou a importância de verificar se o repositório remoto possui commits adicionais antes de realizar operações que possam alterar seu histórico.
+
+Também foi reforçada a preferência por estratégias de sincronização seguras, evitando force push quando não há necessidade.
+
+##16. Estado atual da interface
+Resultado
+
+Após as correções, a interface apresenta:
+
+identidade visual mais próxima da Convem;
+cabeçalho visualmente separado do restante da aplicação;
+dashboard aprimorado;
+Kanban com apresentação mais profissional;
+modais visualmente aprimorados;
+barra de erro inicialmente oculta;
+manutenção das funcionalidades existentes;
+histórico Git contendo checkpoints das alterações relevantes.
+Validação
+
+A aplicação foi executada novamente após as alterações e o comportamento da barra de erro foi validado diretamente no navegador.
+
+Decisão
+
+Continuar priorizando melhorias de qualidade visual e usabilidade, sem realizar alterações desnecessárias na lógica de negócio enquanto as funcionalidades existentes permanecerem estáveis.
+
 
 ## Observações
 
