@@ -3,73 +3,160 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Incident Hub</title>
+  <title>Incident Hub | Convem</title>
   <link rel="stylesheet" href="/static/style.css" />
 </head>
+
 <body>
+
   <header class="topbar">
-    <h1>Incident Hub</h1>
-    <button id="open-create-modal" class="btn btn-primary">+ Novo incidente</button>
+    <div class="brand-area">
+      <div class="brand-mark">C</div>
+      <div>
+        <span class="brand-name">CONVEM</span>
+        <h1>Incident Hub</h1>
+      </div>
+    </div>
+
+    <button id="open-create-modal" class="btn btn-primary">
+      <span class="btn-icon">+</span>
+      Novo incidente
+    </button>
   </header>
 
-  <section class="dashboard" id="dashboard">
-    <div class="dashboard-card">
-      <span class="dashboard-number" id="dash-open">-</span>
-      <span class="dashboard-label">Abertos</span>
-    </div>
-    <div class="dashboard-card dashboard-card-critical">
-      <span class="dashboard-number" id="dash-critical">-</span>
-      <span class="dashboard-label">Critical não resolvidos</span>
-    </div>
-    <div class="dashboard-card">
-      <span class="dashboard-number" id="dash-resolved">-</span>
-      <span class="dashboard-label">Resolvidos</span>
-    </div>
-  </section>
+  <main>
 
-  <section class="filters">
-    <label>
-      Severidade:
-      <select id="filter-severity">
-        <option value="">Todas</option>
-        <option value="Low">Low</option>
-        <option value="Medium">Medium</option>
-        <option value="High">High</option>
-        <option value="Critical">Critical</option>
-      </select>
-    </label>
-  </section>
+    <section class="dashboard" id="dashboard">
 
-  <div id="error-banner" class="error-banner" hidden></div>
+      <div class="dashboard-card">
+        <div class="dashboard-card-header">
+          <span class="dashboard-label">Abertos</span>
+          <span class="dashboard-icon">↗</span>
+        </div>
 
-  <main class="board">
-    <div class="column" data-status="Open">
-      <h2>Open</h2>
-      <div class="card-list" id="column-open"></div>
-    </div>
-    <div class="column" data-status="In Progress">
-      <h2>In Progress</h2>
-      <div class="card-list" id="column-in-progress"></div>
-    </div>
-    <div class="column" data-status="Resolved">
-      <h2>Resolved</h2>
-      <div class="card-list" id="column-resolved"></div>
-    </div>
+        <span class="dashboard-number" id="dash-open">-</span>
+        <span class="dashboard-caption">Incidentes aguardando resolução</span>
+      </div>
+
+      <div class="dashboard-card dashboard-card-critical">
+        <div class="dashboard-card-header">
+          <span class="dashboard-label">Critical não resolvidos</span>
+          <span class="dashboard-icon">!</span>
+        </div>
+
+        <span class="dashboard-number" id="dash-critical">-</span>
+        <span class="dashboard-caption">Requerem atenção imediata</span>
+      </div>
+
+      <div class="dashboard-card">
+        <div class="dashboard-card-header">
+          <span class="dashboard-label">Resolvidos</span>
+          <span class="dashboard-icon">✓</span>
+        </div>
+
+        <span class="dashboard-number" id="dash-resolved">-</span>
+        <span class="dashboard-caption">Incidentes solucionados</span>
+      </div>
+
+    </section>
+
+    <section class="filters">
+      <div class="filters-title">
+        <span class="filter-icon">≡</span>
+        <span>Filtrar incidentes</span>
+      </div>
+
+      <label>
+        Severidade:
+        <select id="filter-severity">
+          <option value="">Todas</option>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+          <option value="Critical">Critical</option>
+        </select>
+      </label>
+    </section>
+
+    <div id="error-banner" class="error-banner" hidden></div>
+
+    <section class="board">
+
+      <div class="column" data-status="Open">
+        <div class="column-header">
+          <div>
+            <span class="column-indicator indicator-open"></span>
+            <h2>Open</h2>
+          </div>
+          <span class="column-status-label">Ativos</span>
+        </div>
+
+        <div class="card-list" id="column-open"></div>
+      </div>
+
+      <div class="column" data-status="In Progress">
+        <div class="column-header">
+          <div>
+            <span class="column-indicator indicator-progress"></span>
+            <h2>In Progress</h2>
+          </div>
+          <span class="column-status-label">Em andamento</span>
+        </div>
+
+        <div class="card-list" id="column-in-progress"></div>
+      </div>
+
+      <div class="column" data-status="Resolved">
+        <div class="column-header">
+          <div>
+            <span class="column-indicator indicator-resolved"></span>
+            <h2>Resolved</h2>
+          </div>
+          <span class="column-status-label">Finalizados</span>
+        </div>
+
+        <div class="card-list" id="column-resolved"></div>
+      </div>
+
+    </section>
+
   </main>
 
   <!-- Modal de criação -->
   <div id="create-modal" class="modal-overlay" hidden>
     <div class="modal">
-      <h2>Novo incidente</h2>
+
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow">INCIDENT MANAGEMENT</span>
+          <h2>Novo incidente</h2>
+        </div>
+        <span class="modal-decoration">+</span>
+      </div>
+
       <form id="create-form">
+
         <label>
           Título
-          <input type="text" id="create-title" required maxlength="200" />
+          <input
+            type="text"
+            id="create-title"
+            required
+            maxlength="200"
+            placeholder="Descreva o incidente"
+          />
         </label>
+
         <label>
           Descrição
-          <textarea id="create-description" required maxlength="2000"></textarea>
+          <textarea
+            id="create-description"
+            required
+            maxlength="2000"
+            placeholder="Adicione detalhes sobre o incidente..."
+          ></textarea>
         </label>
+
         <label>
           Severidade
           <select id="create-severity" required>
@@ -79,39 +166,72 @@
             <option value="Critical">Critical</option>
           </select>
         </label>
+
         <label>
           Responsável
-          <input type="text" id="create-owner" required maxlength="120" />
+          <input
+            type="text"
+            id="create-owner"
+            required
+            maxlength="120"
+            placeholder="Nome do responsável"
+          />
         </label>
+
         <div class="modal-actions">
-          <button type="button" id="cancel-create" class="btn">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Criar</button>
+          <button type="button" id="cancel-create" class="btn">
+            Cancelar
+          </button>
+
+          <button type="submit" class="btn btn-primary">
+            Criar incidente
+          </button>
         </div>
+
       </form>
     </div>
   </div>
 
   <!-- Modal de detalhes -->
   <div id="detail-modal" class="modal-overlay" hidden>
-    <div class="modal">
-      <h2 id="detail-title"></h2>
+    <div class="modal detail-modal">
+
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow">INCIDENT DETAILS</span>
+          <h2 id="detail-title"></h2>
+        </div>
+      </div>
+
       <span id="detail-severity-badge" class="badge"></span>
+
       <p id="detail-description" class="detail-description"></p>
+
       <dl class="detail-grid">
         <dt>Responsável</dt>
         <dd id="detail-owner"></dd>
+
         <dt>Status</dt>
         <dd id="detail-status"></dd>
+
         <dt>Criado em</dt>
         <dd id="detail-created"></dd>
+
         <dt>Atualizado em</dt>
         <dd id="detail-updated"></dd>
       </dl>
-      <h3>Histórico</h3>
-      <ul id="detail-history" class="history-list"></ul>
-      <div class="modal-actions">
-        <button type="button" id="close-detail" class="btn">Fechar</button>
+
+      <div class="history-section">
+        <h3>Histórico</h3>
+        <ul id="detail-history" class="history-list"></ul>
       </div>
+
+      <div class="modal-actions">
+        <button type="button" id="close-detail" class="btn">
+          Fechar
+        </button>
+      </div>
+
     </div>
   </div>
 
