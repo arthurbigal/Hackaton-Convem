@@ -27,38 +27,53 @@
   <main>
 
     <section class="dashboard" id="dashboard">
+  <div class="dashboard-card">
+    <div class="dashboard-icon dashboard-icon-open" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M3 7.5h7l2 2h9v9.5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7.5Z"/>
+        <path d="M3 7.5V5a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v2.5"/>
+        <path d="M3 9.5h18"/>
+      </svg>
+    </div>
 
-      <div class="dashboard-card">
-        <div class="dashboard-card-header">
-          <span class="dashboard-label">Abertos</span>
-          <span class="dashboard-icon">↗</span>
-        </div>
+    <div class="dashboard-content">
+      <span class="dashboard-number" id="dash-open">-</span>
+      <span class="dashboard-label">Abertos</span>
+      <span class="dashboard-caption">Incidentes aguardando atendimento</span>
+    </div>
+  </div>
 
-        <span class="dashboard-number" id="dash-open">-</span>
-        <span class="dashboard-caption">Incidentes aguardando resolução</span>
-      </div>
+  <div class="dashboard-card dashboard-card-critical">
+    <div class="dashboard-icon dashboard-icon-critical" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M10.3 3.8 2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.8a2 2 0 0 0-3.4 0Z"/>
+        <path d="M12 8v5"/>
+        <path d="M12 16.5h.01"/>
+      </svg>
+    </div>
 
-      <div class="dashboard-card dashboard-card-critical">
-        <div class="dashboard-card-header">
-          <span class="dashboard-label">Critical não resolvidos</span>
-          <span class="dashboard-icon">!</span>
-        </div>
+    <div class="dashboard-content">
+      <span class="dashboard-number" id="dash-critical">-</span>
+      <span class="dashboard-label">Critical não resolvidos</span>
+      <span class="dashboard-caption">Requerem atenção imediata</span>
+    </div>
+  </div>
 
-        <span class="dashboard-number" id="dash-critical">-</span>
-        <span class="dashboard-caption">Requerem atenção imediata</span>
-      </div>
+  <div class="dashboard-card">
+    <div class="dashboard-icon dashboard-icon-resolved" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="m8 12 2.7 2.7L16.5 9"/>
+      </svg>
+    </div>
 
-      <div class="dashboard-card">
-        <div class="dashboard-card-header">
-          <span class="dashboard-label">Resolvidos</span>
-          <span class="dashboard-icon">✓</span>
-        </div>
-
-        <span class="dashboard-number" id="dash-resolved">-</span>
-        <span class="dashboard-caption">Incidentes solucionados</span>
-      </div>
-
-    </section>
+    <div class="dashboard-content">
+      <span class="dashboard-number" id="dash-resolved">-</span>
+      <span class="dashboard-label">Resolvidos</span>
+      <span class="dashboard-caption">Incidentes concluídos</span>
+    </div>
+  </div>
+</section>
 
     <section class="filters">
       <div class="filters-title">
